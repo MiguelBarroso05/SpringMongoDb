@@ -1,6 +1,7 @@
 package com.github.miguelbarroso05.workshopmongo.resources;
 
 import com.github.miguelbarroso05.workshopmongo.domain.User;
+import com.github.miguelbarroso05.workshopmongo.dtos.UserDTO;
 import com.github.miguelbarroso05.workshopmongo.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -22,7 +24,10 @@ public class UserResource {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<User> findAll(){
-       return userService.findAll();
+    public List<UserDTO> findAll(){
+       List<User> userList =  userService.findAll();
+       List<UserDTO> userDTOList =
+        userList.stream().map(user -> new UserDTO(user)).collect(Collectors.toList());
+       return userDTOList;
     }
 }
